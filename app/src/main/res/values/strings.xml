@@ -3,4 +3,5 @@
     <string name="Startmatch">Start Match</string>
     <string name="start">Start</string>
     <string name="title_activity_main2">Main2Activity</string>
+    <string name="team_a">"0"</string>
 </resources>

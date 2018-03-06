@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Main2Activity extends AppCompatActivity {
     Button team1;
@@ -13,10 +14,13 @@ public class Main2Activity extends AppCompatActivity {
     Button reset;
     Button regain;
     TextView vw;
+
     int a=0;
     int b=0;
     int a1=0;
     int b1=0;
+    int temp_a1=0;
+    int temp_b1=0;
     public static final String team_a = "a";
     public static final String team_b = "b";
     public static final String set_a = "a1";
@@ -53,25 +57,35 @@ public class Main2Activity extends AppCompatActivity {
 
                 a++;
 
-                if (a>=0&&a<=25) {
+                if (a>=0&&a<25) {
 
                     ta.setText(""+a);
+                    vw.setVisibility(View.INVISIBLE);
                     editor.putInt(team_a,a);
                     editor.commit();
 
                 }
+
                 else
                 {
-                    vw.setText("Team A Wins");
+                    if(((a - b) <2) || (a == 25 && b == 24)) {
+
+                        ta.setText(""+a);
+                    }
+                   else{ vw.setText("Team A Wins");
                     a1++;
                     t.setText(a1+" : "+b1);
+                    temp_a1=a;
+                    temp_b1=b;
+                    editor.putInt("temp_a1",a);
+                    editor.putInt("temp_b1",b);
 
                     a=0;
                     b=0;
                     ta.setText(""+a);
                     tb.setText(""+b);
                     editor.putInt(set_a,a1);
-                    editor.putInt(set_b,b1);
+                    editor.putInt(set_b,b1);}
 
                     editor.commit();
                 }
@@ -83,15 +97,23 @@ public class Main2Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 b++;
-                if (b >= 0 && b <= 25){
+                if (b >= 0 && b <25){
                     tb.setText(""+b);
+                    vw.setVisibility(View.INVISIBLE);
                     editor.putInt(team_b,b);
                     editor.apply();
                 }
                 else {
-                    vw.setText("Team B Wins");
+                    if(((b - a) <2) || (a == 24 && b == 25)) {
+
+                        tb.setText(""+b);
+
+                    }
+                   else{ vw.setText("Team B Wins");
                     b1++;
                     t.setText(a1+" : "+b1);
+                    editor.putInt("temp_a1",a);
+                    editor.putInt("temp_b1",b);
 
                     a=0;
                     b=0;
@@ -99,6 +121,7 @@ public class Main2Activity extends AppCompatActivity {
                     tb.setText(""+b);
                     editor.putInt(set_a,a1);
                     editor.putInt(set_b,b1);
+                    }
                     editor.commit();
                 }
             }
@@ -107,12 +130,16 @@ public class Main2Activity extends AppCompatActivity {
         reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                ta.setText("0");
-                tb.setText("0");
+                editor.clear();
+                editor.commit();
+                a=0;
+                b=0;
+                ta.setText(""+a);
+                tb.setText(""+b);
                 a1=0;
                 b1=0;
                 t.setText(a1+" : "+b1);
+
 
 
             }
@@ -124,19 +151,15 @@ public class Main2Activity extends AppCompatActivity {
                 int temp_a=0;
                 int temp_b=0;
 
-                a = sharedpreferences.getInt(team_a,0);
-                b=sharedpreferences.getInt(team_b,0 );
-                ta.setText(""+a);
-                tb.setText(""+b);
-
                 temp_a=sharedpreferences.getInt(set_a,0);
                 temp_b = sharedpreferences.getInt(set_b, 0);
+                temp_a1=sharedpreferences.getInt("temp_a1",0);
+                temp_b1=sharedpreferences.getInt("temp_b1",0);
+                Toast.makeText(Main2Activity.this,temp_a1+"-"+temp_b1,Toast.LENGTH_LONG).show();
                 t.setText(temp_a+" : "+temp_b);
 
             }
         });
-
-
 
 
     }
